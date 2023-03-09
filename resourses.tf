@@ -50,22 +50,16 @@ resource "aws_api_gateway_resource" "get_resource" {
   path_part   = "visitors"
 }
 
-resource "aws_api_gateway_resource" "get_mainpath" {
-  rest_api_id = aws_api_gateway_rest_api.visitor-api.id
-  parent_id   = aws_api_gateway_resource.get_resource.id
-  path_part   = "{id}"
-}
-
 resource "aws_api_gateway_method" "get_method" {
   rest_api_id   = aws_api_gateway_rest_api.visitor-api.id
-  resource_id   = aws_api_gateway_resource.get_mainpath.id
+  resource_id   = aws_api_gateway_resource.get_resource.id
   http_method   = "POST"
   authorization = "NONE"
 }
 
 resource "aws_api_gateway_integration" "put_count_integration" {
   rest_api_id             = aws_api_gateway_rest_api.visitor-api.id
-  resource_id             = aws_api_gateway_resource.get_mainpath.id
+  resource_id             = aws_api_gateway_resource.get_resource.id
   http_method             = aws_api_gateway_method.get_method.http_method
   type                    = "AWS_PROXY"
   integration_http_method = "POST"
@@ -77,7 +71,7 @@ resource "aws_api_gateway_integration" "put_count_integration" {
 
 resource "aws_api_gateway_method_response" "get_method_response_200" {
   rest_api_id = aws_api_gateway_rest_api.visitor-api.id
-  resource_id = aws_api_gateway_resource.get_mainpath.id
+  resource_id = aws_api_gateway_resource.get_resource.id
   http_method = aws_api_gateway_method.get_method.http_method
   status_code = "200"
   response_parameters = {
@@ -96,7 +90,7 @@ resource "aws_api_gateway_deployment" "crc_api_deployment_post" {
 resource "aws_api_gateway_method_settings" "get_count" {
   rest_api_id = aws_api_gateway_rest_api.visitor-api.id
   stage_name  = aws_api_gateway_deployment.crc_api_deployment_post.stage_name
-  method_path = "${aws_api_gateway_resource.get_mainpath.path_part}/${aws_api_gateway_method.get_method.http_method}"
+  method_path = "${aws_api_gateway_resource.get_resource.path_part}/${aws_api_gateway_method.get_method.http_method}"
 
   settings {}
 }
