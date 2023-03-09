@@ -59,16 +59,16 @@ resource "aws_api_gateway_resource" "get_mainpath" {
 resource "aws_api_gateway_method" "get_method" {
   rest_api_id   = aws_api_gateway_rest_api.visitor-api.id
   resource_id   = aws_api_gateway_resource.get_mainpath.id
-  http_method   = "GET"
+  http_method   = "POST"
   authorization = "NONE"
 }
 
-resource "aws_api_gateway_integration" "get_count_integration" {
+resource "aws_api_gateway_integration" "put_count_integration" {
   rest_api_id             = aws_api_gateway_rest_api.visitor-api.id
   resource_id             = aws_api_gateway_resource.get_mainpath.id
   http_method             = aws_api_gateway_method.get_method.http_method
   type                    = "AWS_PROXY"
-  integration_http_method = "GET"
+  integration_http_method = "POST"
   uri                     = data.aws_lambda_function.visitorCounter.invoke_arn
 
   depends_on = [aws_api_gateway_method.get_method, data.aws_lambda_function.visitorCounter]
@@ -90,7 +90,7 @@ resource "aws_api_gateway_deployment" "crc_api_deployment_post" {
   rest_api_id = aws_api_gateway_rest_api.visitor-api.id
   stage_name  = "dev"
 
-  depends_on = [aws_api_gateway_integration.get_count_integration]
+  depends_on = [aws_api_gateway_integration.put_count_integration]
 }
 
 resource "aws_api_gateway_method_settings" "get_count" {
