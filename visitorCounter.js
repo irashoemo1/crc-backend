@@ -41,7 +41,7 @@ export const handler = async (event, context) => {
                 );
                 body = `Put item ${requestJSON.id}`;
                 break;
-            case "GET /visitors/{id}":
+            case "POST /visitors/{id}":
                 body = await dynamo.send(
                     new GetCommand({
                         TableName: tableName,

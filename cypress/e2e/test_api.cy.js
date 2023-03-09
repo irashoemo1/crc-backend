@@ -1,6 +1,6 @@
 describe('Test visit count api', () => {
     it('fetches visitorCounter', () => {
-        cy.request('GET', `/1`)
+        cy.request('POST', `/1`)
             .then((resp) => {
                 const data = resp.body;
 
