@@ -21,7 +21,7 @@ export const handler = async (event, context) => {
     };
 
     try {
-        switch (event.routeKey) {
+        switch (`${event.httpMethod} ${event.resource}`) {
             case "GET /visitors":
                 body = await dynamo.send(
                     new ScanCommand({ TableName: tableName })
@@ -41,7 +41,7 @@ export const handler = async (event, context) => {
                 );
                 body = `Put item ${requestJSON.id}`;
                 break;
-            case "POST /visitors/{id}":
+            case "GET /visitors/{id}":
                 body = await dynamo.send(
                     new GetCommand({
                         TableName: tableName,
@@ -62,7 +62,7 @@ export const handler = async (event, context) => {
                 );
                 break;
             default:
-                throw new Error(`Unsupported route: "${event.routeKey}"`);
+                throw new Error(`Unsupported route: "${Object.entries(event)}"`);
         }
     } catch (err) {
         statusCode = 400;
