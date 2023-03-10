@@ -68,7 +68,7 @@ resource "aws_api_gateway_integration" "get_count_integration" {
   resource_id             = aws_api_gateway_resource.get_mainpath.id
   http_method             = aws_api_gateway_method.get_method.http_method
   type                    = "AWS_PROXY"
-  integration_http_method = "GET"
+  integration_http_method = "POST"
   uri                     = data.aws_lambda_function.visitorCounter.invoke_arn
 
   depends_on = [aws_api_gateway_method.get_method, data.aws_lambda_function.visitorCounter]
@@ -131,5 +131,5 @@ resource "aws_lambda_permission" "add_count_permission" {
   action        = "lambda:InvokeFunction"
   function_name = data.aws_lambda_function.visitorCounter.arn
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.visitor-api.execution_arn}/*/${aws_api_gateway_method.get_method.http_method}/visitors"
+  source_arn    = "${aws_api_gateway_rest_api.visitor-api.execution_arn}/*/*/"
 }
