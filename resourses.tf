@@ -131,5 +131,5 @@ resource "aws_lambda_permission" "add_count_permission" {
   action        = "lambda:InvokeFunction"
   function_name = data.aws_lambda_function.visitorCounter.arn
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.visitor-api.execution_arn}/*/*/"
+  source_arn    = "${aws_api_gateway_rest_api.visitor-api.execution_arn}/*/*/visitors"
 }
